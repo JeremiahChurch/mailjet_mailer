@@ -11,7 +11,7 @@ Inherit the MailjetMailer class in your existing Rails mailers to send transacti
 Add this line to your application's Gemfile:
 
 ```
-gem 'mailjet_mailer'
+gem 'mailjet_mailer', github: 'Tongboy/mailjet_mailer'
 ```
 
 And then execute:
@@ -49,7 +49,7 @@ You will also need to set `default_url_options` for the mailer, similar to Actio
 in your environment config files in `config/environments`:
 
 ```ruby
-config.mailjet_mailer.default_url_options = { :host => 'localhost' }
+config.mailjet_mailer.default_url_options = { host: 'localhost' }
 ```
 
 ## Creating a new mailer
@@ -116,7 +116,7 @@ end
 
 
 ## Sending a message without template
-Sending a message without template is similar to sending a one with a template. Unlike the mandrill mailer you don't have to inherit a different class. you just use different values
+Sending a message without template is similar to sending one with a template. Unlike the mandrill mailer you don't have to inherit a different class - you just use different values.
 
 ```ruby
 class InvitationMailer < MailjetMailer::MessageMailer
