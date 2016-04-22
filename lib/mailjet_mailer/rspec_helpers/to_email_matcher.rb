@@ -4,7 +4,7 @@
 #             :name - Name of reciever
 #             :email - email of reciever
 #
-# WelcomeMailer is an instance of MandrillMailler::TemplateMailer
+# WelcomeMailer is an instance of MailjetMailler::TemplateMailer
 #
 # let(:user) { create(:user) }
 # let(:mailer) { WelcomeMailer.welcome_registered(user) }

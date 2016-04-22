@@ -1,5 +1,5 @@
 require 'ostruct'
-module MandrillMailer
+module MailjetMailer
   class Mock < OpenStruct
   end
 end

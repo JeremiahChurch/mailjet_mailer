@@ -1,14 +1,14 @@
-# Offline modifications for using MandrillMailer without actually sending
-# emails through Mandrill's API. Particularly useful for acceptance tests.
+# Offline modifications for using MailjetMailer without actually sending
+# emails through Mailjet's API. Particularly useful for acceptance tests.
 #
 # To use, just require this file (say, in your spec_helper.rb):
 #
-#   require 'mandrill_mailer/offline'
+#   require 'mailjet_mailer/offline'
 #
 # And then if you wish you can look at the contents of
-# MandrillMailer.deliveries to see whether an email was queued up by your test:
+# MailjetMailer.deliveries to see whether an email was queued up by your test:
 #
-#   email = MandrillMailer::deliveries.detect { |mail|
+#   email = MailjetMailer::deliveries.detect { |mail|
 #     mail.template_name == 'my-template' &&
 #     mail.message['to'].any? { |to| to['email'] == 'my@email.com' }
 #   }
@@ -16,11 +16,11 @@
 #
 # Don't forget to clear out deliveries:
 #
-#   before :each { MandrillMailer.deliveries.clear }
+#   before :each { MailjetMailer.deliveries.clear }
 #
-require 'mandrill_mailer'
+require 'mailjet_mailer'
 
-module MandrillMailer
+module MailjetMailer
   def self.deliveries
     @deliveries ||= []
   end
@@ -31,27 +31,27 @@ module MandrillMailer
     end
     
     def deliver_now
-      MandrillMailer::Mock.new({
+      MailjetMailer::Mock.new({
         :template_name    => template_name,
         :template_content => template_content,
         :message          => message,
         :async            => async,
-        :ip_pool          => ip_pool,
+        # :ip_pool          => ip_pool,
         :send_at          => send_at
       }).tap do |mock|
-         MandrillMailer.deliveries << mock
+         MailjetMailer.deliveries << mock
       end
     end
     def deliver_later
-      MandrillMailer::Mock.new({
+      MailjetMailer::Mock.new({
         :template_name    => template_name,
         :template_content => template_content,
         :message          => message,
         :async            => async,
-        :ip_pool          => ip_pool,
+        # :ip_pool          => ip_pool,
         :send_at          => send_at
       }).tap do |mock|
-         MandrillMailer.deliveries << mock
+         MailjetMailer.deliveries << mock
       end
     end
   end
@@ -61,23 +61,23 @@ module MandrillMailer
       deliver_now
     end
     def deliver_now
-      MandrillMailer::Mock.new({
+      MailjetMailer::Mock.new({
         :message          => message,
         :async            => async,
-        :ip_pool          => ip_pool,
+        # :ip_pool          => ip_pool,
         :send_at          => send_at
       }).tap do |mock|
-         MandrillMailer.deliveries << mock
+         MailjetMailer.deliveries << mock
       end
     end
     def deliver_later
-      MandrillMailer::Mock.new({
+      MailjetMailer::Mock.new({
         :message          => message,
         :async            => async,
-        :ip_pool          => ip_pool,
+        # :ip_pool          => ip_pool,
         :send_at          => send_at
       }).tap do |mock|
-         MandrillMailer.deliveries << mock
+         MailjetMailer.deliveries << mock
       end
     end
   end

@@ -1,6 +1,6 @@
 require 'rspec'
-require 'mandrill_mailer'
-require "mandrill"
+require 'mailjet_mailer'
+require "mailjet"
 
 require 'pry'
 

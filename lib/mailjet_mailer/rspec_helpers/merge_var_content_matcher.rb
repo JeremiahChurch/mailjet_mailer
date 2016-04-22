@@ -2,7 +2,7 @@
 #
 # expected_data - Data to look for in the specified merge var key.
 #
-# WelcomeMailer is an instance of MandrillMailler::TemplateMailer
+# WelcomeMailer is an instance of MailjetMailler::TemplateMailer
 #
 # let(:user) { FactoryGirl.create(:user) }
 # let(:mailer) { WelcomeMailer.welcome_registered(user) }

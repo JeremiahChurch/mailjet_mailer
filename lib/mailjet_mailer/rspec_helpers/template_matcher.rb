@@ -1,8 +1,8 @@
 # Public: Matcher for asserting template
 #
-#   template_name: - name of template in mandrill the mailer sends to
+#   template_name: - name of template in mailjet the mailer sends to
 #
-# WelcomeMailer is an instance of MandrillMailler::TemplateMailer
+# WelcomeMailer is an instance of MailjetMailler::TemplateMailer
 #
 # let(:user) { create(:user) }
 # let(:mailer) { WelcomeMailer.welcome_registered(user) }

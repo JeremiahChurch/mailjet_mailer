@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.0 - 2016-4-21
+### Forked from mandrill_mailer
+- Very ugly migration from the great work that is the mandrill_mailer gem to have a functioning implementation for mailjet
+
 ## 1.3.0 - 2016-3-02
 ### Added
 - Fixed an issue where deliver_later functionality was not working as intended when inheriting from the mailer classes. via @eric1234 

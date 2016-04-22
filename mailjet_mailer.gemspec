@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "mandrill_mailer/version"
+require "mailjet_mailer/version"
 
 Gem::Specification.new do |s|
-  s.name        = "mandrill_mailer"
-  s.version     = MandrillMailer::VERSION
+  s.name        = "mailjet_mailer"
+  s.version     = MailjetMailer::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Adam Rensel"]
-  s.email       = ["adamrensel@codeschool.com"]
-  s.homepage    = "https://github.com/renz45/mandrill_mailer"
-  s.summary     = %q{Transactional Mailer for Mandrill}
-  s.description = %q{Transactional Mailer for Mandrill}
+  s.authors     = ["Jeremiah Church"]
+  s.email       = ["jeremiahchurch@gmail.com"]
+  s.homepage    = "https://github.com/Tongboy/mailjet_mailer"
+  s.summary     = %q{Transactional Mailer for Mailjet}
+  s.description = %q{Transactional Mailer for Mailjet}
   s.license = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport'
   s.add_dependency 'actionpack'
   s.add_dependency 'activejob'
-  s.add_runtime_dependency 'mandrill-api', '~> 1.0.9'
+  s.add_runtime_dependency 'mailjet', '~> 1.3.8'
 
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec'

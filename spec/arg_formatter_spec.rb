@@ -1,7 +1,7 @@
 require "spec_helper"
 require 'base64'
 
-describe MandrillMailer::ArgFormatter do
+describe MailjetMailer::ArgFormatter do
   subject(:formatter) { described_class }
   let(:api_args) do
     {
@@ -76,10 +76,10 @@ describe MandrillMailer::ArgFormatter do
     end
   end
 
-  describe ".mandrill_args" do
+  describe ".mailjet_args" do
     context "args are blank" do
       it "returns an empty array" do
-        expect(formatter.mandrill_args(nil)).to eq []
+        expect(formatter.mailjet_args(nil)).to eq []
       end
     end
 
@@ -88,7 +88,7 @@ describe MandrillMailer::ArgFormatter do
       let(:arg_value) { 'bob' }
 
       it 'should convert the args to the correct format' do
-        results = formatter.mandrill_args({arg_name => arg_value})
+        results = formatter.mailjet_args({arg_name => arg_value})
         expect(results).to eq [{'name' => arg_name, 'content' => arg_value}]
       end
     end
@@ -142,14 +142,14 @@ describe MandrillMailer::ArgFormatter do
       end
 
       context 'with a single email string' do
-        it 'should format args to a format mandrill likes' do
+        it 'should format args to a format mailjet likes' do
           results = formatter.params(email)
           expect(results).to eq [{"email" => email, "name" => email}]
         end
       end
 
       context 'with a single email/name Hash' do
-        it 'should format args to a format mandrill likes' do
+        it 'should format args to a format mailjet likes' do
           results = formatter.params({"email" => email, "name" => name})
           expect(results).to eq [{"email" => email, "name" => name}]
         end
@@ -164,14 +164,14 @@ describe MandrillMailer::ArgFormatter do
       end
 
       context 'with a single email string array' do
-        it 'should format args to a format mandrill likes' do
+        it 'should format args to a format mailjet likes' do
           results = formatter.params([email])
           expect(results).to eq [{"email" => email, "name" => email}]
         end
       end
 
       context 'with a single email/name hash Array' do
-        it 'should format args to a format mandrill likes' do
+        it 'should format args to a format mailjet likes' do
           results = formatter.params([{"email" => email, "name" => name}])
           expect(results).to eq [{"email" => email, "name" => name}]
         end
@@ -222,7 +222,7 @@ describe MandrillMailer::ArgFormatter do
 
       context "merge_language is not an accepted merge language" do
         it "raises an error" do
-          expect { formatter.format_messages_api_message_data({merge_language: "not_valid"}, {}) }.to raise_error(MandrillMailer::CoreMailer::InvalidMergeLanguageError)
+          expect { formatter.format_messages_api_message_data({merge_language: "not_valid"}, {}) }.to raise_error(MailjetMailer::CoreMailer::InvalidMergeLanguageError)
         end
       end
     end

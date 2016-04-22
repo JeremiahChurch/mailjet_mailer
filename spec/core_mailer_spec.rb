@@ -1,13 +1,14 @@
 require "spec_helper"
 require 'base64'
 
-describe MandrillMailer::CoreMailer do
+describe MailjetMailer::CoreMailer do
   subject(:core_mailer) { described_class }
 
   let(:image_path) { '/assets/image.jpg' }
   let(:default_host) { 'localhost:3000' }
   let(:mailer) { described_class.new }
   let(:api_key) { '1237861278' }
+  let(:secret_key) { '87654321' }
 
   let(:from_email) { 'from@email.com' }
   let(:to_email) { 'bob@email.com' }
@@ -28,7 +29,7 @@ describe MandrillMailer::CoreMailer do
   let(:bcc) { "bcc@email.com" }
 
   let(:async) { double(:async) }
-  let(:ip_pool) { double(:ip_pool) }
+  # let(:ip_pool) { double(:ip_pool) }
 
   let(:args) do
     {
@@ -54,7 +55,7 @@ describe MandrillMailer::CoreMailer do
       important: true,
       send_at: send_at,
       async: async,
-      ip_pool: ip_pool,
+      # ip_pool: ip_pool,
       track_opens: false,
       track_clicks: false,
       url_strip_qs: false
@@ -70,29 +71,30 @@ describe MandrillMailer::CoreMailer do
   end
 
   before do
-    MandrillMailer.config.api_key = api_key
-    MandrillMailer.config.default_url_options = { host: default_host }
-    allow(MandrillMailer.config).to receive(:image_path).and_return(image_path)
+    MailjetMailer.config.api_key = api_key
+    MailjetMailer.config.secret_key = secret_key
+    MailjetMailer.config.default_url_options = { host: default_host }
+    allow(MailjetMailer.config).to receive(:image_path).and_return(image_path)
   end
 
-  describe "#mandrill_mail" do
+  describe "#mailjet_mail" do
     it "applies interceptors to the message" do
       expect(mailer).to receive(:apply_interceptors!)
-      mailer.mandrill_mail(args)
+      mailer.mailjet_mail(args)
     end
 
-    it "calls the mandrill_mail_handler" do
-      expect(mailer).to receive(:mandrill_mail_handler)
-      mailer.mandrill_mail(args)
+    it "calls the mailjet_mail_handler" do
+      expect(mailer).to receive(:mailjet_mail_handler)
+      mailer.mailjet_mail(args)
     end
 
     it "sets the mailer message attribute" do
-      expect { mailer.mandrill_mail(args) }.to change { mailer.message }.from(nil)
+      expect { mailer.mailjet_mail(args) }.to change { mailer.message }.from(nil)
     end
 
     it "extracts api_options" do
       expect(mailer).to receive(:extract_api_options!).with(args)
-      mailer.mandrill_mail(args)
+      mailer.mailjet_mail(args)
     end
 
     it "applies defaults" do
@@ -115,7 +117,7 @@ describe MandrillMailer::CoreMailer do
       end
 
       new_unique_mailer = unique_mailer.new
-      new_unique_mailer.mandrill_mail({})
+      new_unique_mailer.mailjet_mail({})
 
       expect(new_unique_mailer.message['from_name']).to eq default_from
       expect(new_unique_mailer.message['from_email']).to eq default_from_email
@@ -127,7 +129,7 @@ describe MandrillMailer::CoreMailer do
 
     describe "vars attribute" do
       it "returns the vars" do
-        mailer.mandrill_mail(args)
+        mailer.mailjet_mail(args)
         expect(mailer.message["global_merge_vars"].first.values).to include(var_name)
         expect(mailer.message["global_merge_vars"].first.values).to include(var_content)
       end
@@ -138,7 +140,7 @@ describe MandrillMailer::CoreMailer do
         end
 
         it "doesn't explode" do
-          expect { mailer.mandrill_mail(args) }.not_to raise_error
+          expect { mailer.mailjet_mail(args) }.not_to raise_error
         end
       end
     end
@@ -155,7 +157,7 @@ describe MandrillMailer::CoreMailer do
       before do
         # use load since we are loading multiple times
         mailer.send(:load, 'fake_rails/fake_rails.rb')
-        MandrillMailer.config.default_url_options[:host] = host
+        MailjetMailer.config.default_url_options[:host] = host
         Rails.application.routes.draw do |builder|
           builder.course_url "#{url}"
         end
@@ -195,7 +197,7 @@ describe MandrillMailer::CoreMailer do
       before do
         # use load instead of require since we have to reload for every test
         mailer.send(:load, 'fake_rails/fake_rails.rb')
-        MandrillMailer.config.default_url_options[:host] = host
+        MailjetMailer.config.default_url_options[:host] = host
       end
 
       # Essentially un-requiring the fake rails class so it doesn't pollute
@@ -309,7 +311,7 @@ describe MandrillMailer::CoreMailer do
     it "sets the required api options associated with the messages api" do
       results = mailer.send(:extract_api_options!, args)
       expect(mailer.send_at).to eq('2020-01-01 08:00:00')
-      expect(mailer.ip_pool).to eq ip_pool
+      # expect(mailer.ip_pool).to eq ip_pool
       expect(mailer.async).to eq async
     end
   end
@@ -317,7 +319,7 @@ describe MandrillMailer::CoreMailer do
   describe "protected#apply_interceptors!" do
     # Clear the interceptor after these tests so we don't get errors elsewhere
     after do
-      MandrillMailer.config.interceptor = nil
+      MailjetMailer.config.interceptor = nil
     end
 
     context "when interceptor config is a proc" do
@@ -325,7 +327,7 @@ describe MandrillMailer::CoreMailer do
       let(:interceptor_email) { "intercept@email.com" }
 
       before do
-        MandrillMailer.config.interceptor = Proc.new {|obj|
+        MailjetMailer.config.interceptor = Proc.new {|obj|
           obj[:to] = interceptor_email
         }
       end
@@ -342,11 +344,11 @@ describe MandrillMailer::CoreMailer do
 
     context "when interceptor config is not a proc" do
       before do
-        MandrillMailer.config.interceptor = "not a proc"
+        MailjetMailer.config.interceptor = "not a proc"
       end
 
       it "raises an error" do
-        expect { mailer.send(:apply_interceptors!, {}) }.to raise_error MandrillMailer::CoreMailer::InvalidInterceptorParams
+        expect { mailer.send(:apply_interceptors!, {}) }.to raise_error MailjetMailer::CoreMailer::InvalidInterceptorParams
       end
     end
   end

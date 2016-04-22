@@ -12,10 +12,10 @@
 #
 #         So then sending the course url helper to the mailer will return the desired url.
 #
-#         In order to use the url helpers, the MandrillMailer.config.default_url_options[:host]
+#         In order to use the url helpers, the MailjetMailer.config.default_url_options[:host]
 #         option needs to be set. So you can set it to something like:
 #
-#         MandrillMailer.config.default_url_options[:host] = 'localhost'
+#         MailjetMailer.config.default_url_options[:host] = 'localhost'
 #
 class Rails
   def self.unload!

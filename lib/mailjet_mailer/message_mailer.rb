@@ -1,18 +1,13 @@
-# MandrilMailer class for sending transactional emails through mandril.
-# Only template based emails are supported at this time.
-
+# MailjetMailer class for sending transactional emails through mailjet.
 # Example usage:
 
-# class InvitationMailer < MandrillMailer::TemplateMailer
-#   default from: 'support@codeschool.com',
-#           from_name: 'Code School',
-#           merge_vars: { 'FOO' => 'Bar' },
-#           view_content_link: true
+# class InvitationMailer < MailjetMailer::MessageMailer
+#   default from: 'support@codeschool.com'
 
 #   def invite(invitation)
 #     invitees = invitation.invitees.map { |invitee| { email: invitee.email, name: invitee.name } }
-#
-#     mandrill_mail template: 'Group Invite',
+#     mailjet_mail html: "<p>Example HTML content</p>",
+#                   text: "Example text content",
 #                   subject: I18n.t('invitation_mailer.invite.subject'),
 #                   to: invitees,
 #                   # to: invitation.email
@@ -29,21 +24,18 @@
 #                                       }
 #                                     }
 #                                   end,
-#                   template_content: {},
-#                   attachments: [{contents: File.read(File.expand_path('assets/some_image.png')), name: 'MyImage.png', type: 'image/png'}],
+#                   attachments: [{content: File.read(File.expand_path('assets/some_image.png')), name: 'MyImage.png', type: 'image/png'}],
 #                   important: true,
 #                   inline_css: true
 #   end
 # end
 
 # #default:
-#   :from               - set the default from email address for the mailer
-#   :from_name          - set the default from name for the mailer
-#   :merge_vars         - set the default merge vars for the mailer
-#   :view_content_link  - set a default view_content_link option for the mailer
+#   :from - set the default from email address for the mailer
 
-# .mandrill_mail
-#   :template(required) - Template name from within Mandrill
+# .mailjet_mail
+#   :html(required) - HTML codes for the Message
+#   :text - Text for the Message
 
 #   :subject(required) - Subject of the email
 
@@ -61,16 +53,11 @@
 
 #   :vars - A Hash of merge tags made available to the email. Use them in the
 #     email by wrapping them in '*||*' vars: {'OWNER_NAME' => 'Suzy'} is used
-#     by doing: *|OWNER_NAME|* in the email template within Mandrill
+#     by doing: *|OWNER_NAME|* in the email template within Mailjet
 #
 #   :recipient_vars - Similar to :vars, this is a Hash of merge tags specific to a particular recipient.
 #     Use this if you are sending batch transactions and hence need to send multiple emails at one go.
 #     ex. [{'someone@email.com' => {'INVITEE_NAME' => 'Roger'}}, {'another@email.com' => {'INVITEE_NAME' => 'Tommy'}}]
-
-#   :template_content - A Hash of values and content for Mandrill editable content blocks.
-#     In MailChimp templates there are editable regions with 'mc:edit' attributes that look
-#     a little like: '<div mc:edit="header">My email content</div>' You can insert content directly into
-#     these fields by passing a Hash {'header' => 'my email content'}
 
 #   :attachments - An array of file objects with the following keys:
 #       content: The file contents, this will be encoded into a base64 string internally
@@ -104,42 +91,23 @@
 #   message HTML - only for HTML documents less than 256KB in size
 
 # :important - whether or not this message is important, and should be delivered ahead of non-important messages
-require 'mandrill_mailer/core_mailer'
-require 'mandrill_mailer/arg_formatter'
-require 'mandrill_mailer/mandrill_template_later'
-
-module MandrillMailer
-  class TemplateMailer < MandrillMailer::CoreMailer
-
-    # Public: The name of the template to use
-    attr_accessor :template_name
-
-    # Public: Template content
-    attr_accessor :template_content
-
-    # Public: Triggers the stored Mandrill params to be sent to the Mandrill api
+require 'mailjet_mailer/core_mailer'
+require 'mailjet_mailer/mailjet_message_later'
+module MailjetMailer
+  class MessageMailer < MailjetMailer::CoreMailer
+    # Public: Triggers the stored Mailjet params to be sent to the Mailjet api
     def deliver
       deliver_now
     end
 
     def deliver_now
-      mandrill_api.messages.send_template(template_name, template_content, message, async, ip_pool, send_at)
+      p message.compact
+      Mailjet::Send.create(message.compact)
     end
 
     def deliver_later(options={})
-      MandrillMailer::MandrillTemplateJob.set(options).perform_later(template_name, template_content, message, async, ip_pool, send_at, self.class.name)
-    end
-
-    # Handle template mailer specifics before formating the given args
-    def mandrill_mail_handler(args)
-      # Mandrill requires template content to be there, set default value
-      args[:template_content] =  {"blank" => ""} if args[:template_content].blank?
-
-      # Set the template content
-      self.template_content = MandrillMailer::ArgFormatter.mandrill_args(args.delete(:template_content))
-
-      # Set the template name
-      self.template_name = args.delete(:template)
+      MailjetMailer::MailjetMessageJob.set(options).perform_later(message, async, send_at, self.class.name)
+      # MandrillMailer::MandrillMessageJob.set(options).perform_later(message, async, ip_pool, send_at, self.class.name)
     end
   end
 end
