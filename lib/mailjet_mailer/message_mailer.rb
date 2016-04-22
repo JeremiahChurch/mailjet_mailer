@@ -24,9 +24,7 @@
 #                                       }
 #                                     }
 #                                   end,
-#                   attachments: [{content: File.read(File.expand_path('assets/some_image.png')), name: 'MyImage.png', type: 'image/png'}],
-#                   important: true,
-#                   inline_css: true
+#                   attachments: [{content: File.read(File.expand_path('assets/some_image.png')), name: 'MyImage.png', type: 'image/png'}]
 #   end
 # end
 
@@ -73,24 +71,6 @@
 
 # :bcc - Add an email to bcc to
 
-# :tags - Array of Strings to tag the message with. Stats are
-#   accumulated using tags, though we only store the first 100 we see,
-#   so this should not be unique or change frequently. Tags should be
-#   50 characters or less. Any tags starting with an underscore are
-#   reserved for internal use and will cause errors.
-
-# :google_analytics_domains - Array of Strings indicating for which any
-#   matching URLs will automatically have Google Analytics parameters appended
-#   to their query string automatically.
-
-# :google_analytics_campaign - String indicating the value to set for
-#   the utm_campaign tracking parameter. If this isn't provided the email's
-#   from address will be used instead.
-
-# :inline_css - whether or not to automatically inline all CSS styles provided in the
-#   message HTML - only for HTML documents less than 256KB in size
-
-# :important - whether or not this message is important, and should be delivered ahead of non-important messages
 require 'mailjet_mailer/core_mailer'
 require 'mailjet_mailer/mailjet_message_later'
 module MailjetMailer
@@ -101,7 +81,7 @@ module MailjetMailer
     end
 
     def deliver_now
-      p message.compact
+      # p message.compact
       Mailjet::Send.create(message.compact)
     end
 

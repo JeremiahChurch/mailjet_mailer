@@ -9,7 +9,7 @@
 # MailjetMailer.deliveries to see whether an email was queued up by your test:
 #
 #   email = MailjetMailer::deliveries.detect { |mail|
-#     mail.template_name == 'my-template' &&
+#     mail.template == 'my-template' &&
 #     mail.message['to'].any? { |to| to['email'] == 'my@email.com' }
 #   }
 #   expect(email).to_not be_nil
@@ -25,43 +25,13 @@ module MailjetMailer
     @deliveries ||= []
   end
 
-  class TemplateMailer
-    def deliver
-      deliver_now
-    end
-    
-    def deliver_now
-      MailjetMailer::Mock.new({
-        :template_name    => template_name,
-        :template_content => template_content,
-        :message          => message,
-        :async            => async,
-        # :ip_pool          => ip_pool,
-        :send_at          => send_at
-      }).tap do |mock|
-         MailjetMailer.deliveries << mock
-      end
-    end
-    def deliver_later
-      MailjetMailer::Mock.new({
-        :template_name    => template_name,
-        :template_content => template_content,
-        :message          => message,
-        :async            => async,
-        # :ip_pool          => ip_pool,
-        :send_at          => send_at
-      }).tap do |mock|
-         MailjetMailer.deliveries << mock
-      end
-    end
-  end
-
   class MessageMailer
     def deliver
       deliver_now
     end
     def deliver_now
       MailjetMailer::Mock.new({
+        :template         => template,
         :message          => message,
         :async            => async,
         # :ip_pool          => ip_pool,
@@ -72,6 +42,7 @@ module MailjetMailer
     end
     def deliver_later
       MailjetMailer::Mock.new({
+        :template         => template,
         :message          => message,
         :async            => async,
         # :ip_pool          => ip_pool,
