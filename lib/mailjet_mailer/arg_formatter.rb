@@ -83,7 +83,7 @@ module MailjetMailer
         "Mj-TemplateLanguage": args[:template_language],
         "Mj-TemplateErrorDeliver": args[:template_error_deliver], # true/false - sends the email to recipient even if there is a template error
         "Mj-TemplateErrorReporting": args[:from_email] || args[:from] || defaults[:from], # email where copy of message is sent to if there is a mailjet template error
-        # "important": boolean(args[:important]),
+        "Mj-prio": args[:priority], # 0-3 - 2 is default if not specified
         "Mj-trackopen": boolean(args.fetch(:track_opens, true)),
         "Mj-trackclick": boolean(args.fetch(:track_clicks, true)),
         # "auto_text": boolean(args.fetch(:auto_text, true)),

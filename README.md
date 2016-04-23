@@ -97,6 +97,8 @@ end
 
    * `:vars` - A Hash of merge tags made available to the email. Use them in the
      email by wrapping them in `*||*`. For example `{'OWNER_NAME' => 'Suzy'}` is used by doing: `*|OWNER_NAME|*` in the email template within Mailjet
+   
+   * `:priority` - 0, 1, 2, 3 - 2 is default if not specified - Mailjet's priority rating https://app.mailjet.com/docs/email-priority-management
 
    * `:recipient_vars` - Similar to `:vars`, this is a Hash of merge vars specific to a particular recipient.
      Use this if you are sending batch transactions and hence need to send multiple emails at one go.
