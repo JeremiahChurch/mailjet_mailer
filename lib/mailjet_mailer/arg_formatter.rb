@@ -80,10 +80,12 @@ module MailjetMailer
         "bcc": args[:bcc],
         "headers": args[:headers],
         "Mj-TemplateID": args[:template],
-        "Mj-TemplateLanguage": args[:template].presence ? true : nil,
+        "Mj-TemplateLanguage": args[:template_language],
+        "Mj-TemplateErrorDeliver": args[:template_error_deliver], # true/false - sends the email to recipient even if there is a template error
+        "Mj-TemplateErrorReporting": args[:from_email] || args[:from] || defaults[:from], # email where copy of message is sent to if there is a mailjet template error
         # "important": boolean(args[:important]),
-        "mj-trackopen": args.fetch(:track_opens, true),
-        "mj-trackclick": boolean(args.fetch(:track_clicks, true)),
+        "Mj-trackopen": boolean(args.fetch(:track_opens, true)),
+        "Mj-trackclick": boolean(args.fetch(:track_clicks, true)),
         # "auto_text": boolean(args.fetch(:auto_text, true)),
         # "auto_html": boolean(args[:auto_html]),
         # "inline_css": boolean(args[:inline_css]),
