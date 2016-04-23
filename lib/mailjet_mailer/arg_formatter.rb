@@ -96,7 +96,7 @@ module MailjetMailer
         # "merge": boolean(args[:merge]),
         # "merge_language": args[:merge_language],
         # "global_merge_vars": mailjet_args(args[:vars] || args[:global_merge_vars] || defaults[:merge_vars]),
-        "vars": args[:vars].compact,
+        "vars": args[:vars].presence ? args[:vars].compact : nil,
         # "tags": args[:tags],
         # "subaccount": args[:subaccount],
         # "google_analytics_domains": args[:google_analytics_domains],

@@ -31,7 +31,6 @@ module MailjetMailer
     end
     def deliver_now
       MailjetMailer::Mock.new({
-        :template         => template,
         :message          => message,
         :async            => async,
         # :ip_pool          => ip_pool,
@@ -42,7 +41,6 @@ module MailjetMailer
     end
     def deliver_later
       MailjetMailer::Mock.new({
-        :template         => template,
         :message          => message,
         :async            => async,
         # :ip_pool          => ip_pool,
