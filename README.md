@@ -66,9 +66,9 @@ class InvitationMailer < MailjetMailer::MessageMailer
     mailjet_mail(
       template: '132456', # mailjet ID number of template
       subject: I18n.t('invitation_mailer.invite.subject'),
-      to: invitees,
+      to: invitee,
         # to: invitation.email,
-        # to: { email: invitation.email, name: 'Honored Guest' },
+        # recipients: { email: invitation.email, name: 'Honored Guest' },
       vars: {
         'OWNER_NAME' => invitation.owner_name,
         'PROJECT_NAME' => invitation.project_name
@@ -88,7 +88,7 @@ end
 
    * `:subject` - Subject of the email. If no subject supplied, it will fall back to the template default subject from within Mailjet
 
-   * `:to`(required) - Accepts an email String, a Hash with :name and :email keys, or an Array of Hashes with :name, :email, and :type keys
+   * `:to` - Accepts an email String or email/name combo IE 'John <john@doe.com>' - use `:recipients` for arrays or hashes. Use To/BCC/CC together - recipients must be used on it's own per mailjet spec
       - examples:
         1. `'example@domain.com'`
         2. `{ email: 'someone@email.com', name: 'Bob Bertly' }`
