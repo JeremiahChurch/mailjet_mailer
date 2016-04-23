@@ -11,20 +11,20 @@ module MailjetMailer
         type = attachment[:mimetype] || attachment[:type]
         name = attachment[:filename] || attachment[:name]
         file = attachment[:file] || attachment[:content]
-        {"Content-Type" => type, "Filename" => name, "content" => Base64.encode64(file)}
+        {"Content-Type" => type, "Filename" => name, "content" => Base64.encode64(file)}.compact
       end
     end
 
     def self.images_args(args)
       return unless args
-      attachment_args(args)
+      attachment_args(args).compact
     end
 
     # convert a normal hash into the format mailjet needs
     def self.mailjet_args(args)
       return [] unless args
       args.map do |k,v|
-        {'name' => k, 'content' => v}
+        {'name' => k, 'content' => v}.compact
       end
     end
 
@@ -32,7 +32,7 @@ module MailjetMailer
       return [] unless args
       args.map do |item|
         rcpt = item.keys[0]
-        {'rcpt' => rcpt, 'values' => item.fetch(rcpt)}
+        {'rcpt' => rcpt, 'values' => item.fetch(rcpt)}.compact
       end
     end
 
@@ -55,9 +55,9 @@ module MailjetMailer
     # single to params item
     def self.params_item(item)
       if item.kind_of? Hash
-        item
+        item.compact # remove empty hashes so mailjet api doesn't complain
        else
-         {"email": item, "name": item}
+         {"email": item, "name": item}.compact
       end
     end
 
@@ -96,7 +96,7 @@ module MailjetMailer
         # "merge": boolean(args[:merge]),
         # "merge_language": args[:merge_language],
         # "global_merge_vars": mailjet_args(args[:vars] || args[:global_merge_vars] || defaults[:merge_vars]),
-        "vars": args[:vars],
+        "vars": args[:vars].compact,
         # "tags": args[:tags],
         # "subaccount": args[:subaccount],
         # "google_analytics_domains": args[:google_analytics_domains],
@@ -105,7 +105,7 @@ module MailjetMailer
         # "recipient_metadata": args[:recipient_metadata],
         "attachments": attachment_args(args[:attachments]),
         "inline_attachments": images_args(args[:images])
-      }
+      }.compact
     end
   end
 end

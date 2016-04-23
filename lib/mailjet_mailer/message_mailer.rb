@@ -81,8 +81,8 @@ module MailjetMailer
     end
 
     def deliver_now
-      # p message.compact
-      Mailjet::Send.create(message.compact)
+      p message
+      Mailjet::Send.create(message)
     end
 
     def deliver_later(options={})
