@@ -72,16 +72,16 @@ module MailjetMailer
         "html": args[:html],
         "text": args[:text],
         "subject": args[:subject],
-        "from": args[:from] || defaults[:from],
+        # "from": args[:from] || defaults[:from],
         "from_email": args[:from_email] || args[:from] || defaults[:from],
         "from_name": args[:from_name] || defaults[:from_name] || defaults[:from],
-        "recipients": params(args[:recipients]),
-        "to": params(args[:to]),
+        "recipients": args[:recipients].presence ? params(args[:recipients]) : nil,
+        "to": args[:to],
         "cc": args[:cc],
         "bcc": args[:bcc],
         "headers": args[:headers],
         "Mj-TemplateID": args[:template],
-        "Mj-TemplateLanguage": args[:template_language],
+        "Mj-TemplateLanguage": args[:template].present?,
         "Mj-TemplateErrorDeliver": args[:template_error_deliver], # true/false - sends the email to recipient even if there is a template error
         "Mj-TemplateErrorReporting": args[:from_email] || args[:from] || defaults[:from], # email where copy of message is sent to if there is a mailjet template error
         "Mj-prio": args[:priority], # 0-3 - 2 is default if not specified
