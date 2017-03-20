@@ -69,8 +69,8 @@ module MailjetMailer
       end
 
       {
-        "html": args[:html],
-        "text": args[:text],
+        "Html-part": args[:html],
+        "Text-part": args[:text],
         "subject": args[:subject],
         # "from": args[:from] || defaults[:from],
         "from_email": args[:from_email] || args[:from] || defaults[:from],
