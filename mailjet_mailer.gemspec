@@ -18,9 +18,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'activesupport'
-  s.add_dependency 'actionpack'
-  s.add_dependency 'activejob'
+  #s.add_dependency 'activesupport'
+  # s.add_dependency 'actionpack'
+  s#.add_dependency 'activejob'
   s.add_runtime_dependency 'mailjet', '~> 1.3.8'
 
   s.add_development_dependency 'pry'
